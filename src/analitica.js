@@ -93,6 +93,18 @@ function ventaMayorValor(ventas) {
  */
 function ventasDeCiudad(ventas, ciudad) {
   // Tu código aquí
+  const resultado = [];
+  const ciudadBuscada = ciudad.trim().toLowerCase();
+
+  for (const venta of ventas) {
+    const ciudadVenta = venta.ciudad.trim().toLowerCase();
+
+    if (venta.cantidad > 0 && ciudadVenta === ciudadBuscada) {
+      resultado.push(venta);
+    }
+  }
+
+  return resultado;
 }
 
 /**
