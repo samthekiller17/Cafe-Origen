@@ -156,6 +156,14 @@ function ventasValidas(ventas) {
  */
 function resumenVentas(ventas) {
   // Tu código aquí
+  return ventas
+    .filter((venta) => venta.cantidad > 0)
+    .map((venta) => ({
+      id: venta.id,
+      producto: venta.producto,
+      ciudad: venta.ciudad.trim().toLowerCase(),
+      total: valorVenta(venta),
+    }));
 }
 
 /**
