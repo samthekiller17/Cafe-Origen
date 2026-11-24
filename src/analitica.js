@@ -31,7 +31,7 @@ function valorVenta(venta) {
  */
 function totalVendido(ventas) {
   // Tu código aquí
-   let total = 0;
+  let total = 0;
 
   for (const venta of ventas) {
     if (venta.cantidad > 0) {
@@ -50,6 +50,15 @@ function totalVendido(ventas) {
  */
 function totalUnidades(ventas) {
   // Tu código aquí
+  let total = 0;
+
+  for (const venta of ventas) {
+    if (venta.cantidad > 0) {
+      total += venta.cantidad;
+    }
+  }
+
+  return total;
 }
 
 /**
