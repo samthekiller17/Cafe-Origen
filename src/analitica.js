@@ -195,6 +195,13 @@ function totalPorCiudad(ventas) {
  */
 function unidadesPorProducto(ventas) {
   // Tu código aquí
+  return ventas
+    .filter((venta) => venta.cantidad > 0)
+    .reduce((totales, venta) => {
+      totales[venta.producto] = (totales[venta.producto] || 0) + venta.cantidad;
+
+      return totales;
+    }, {});
 }
 
 /**
