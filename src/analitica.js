@@ -116,6 +116,17 @@ function ventasDeCiudad(ventas, ciudad) {
  */
 function promedioPorVenta(ventas) {
   // Tu código aquí
+  let total = 0;
+  let cantidadVentas = 0;
+
+  for (const venta of ventas) {
+    if (venta.cantidad > 0) {
+      total += valorVenta(venta);
+      cantidadVentas++;
+    }
+  }
+
+  return cantidadVentas === 0 ? 0 : total / cantidadVentas;
 }
 
 // ============================================================================
