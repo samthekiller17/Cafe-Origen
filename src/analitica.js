@@ -216,6 +216,19 @@ function unidadesPorProducto(ventas) {
 function topProductosPorValor(ventas, k) {
 
   // Tu código aquí
+  const totales = ventas
+    .filter((venta) => venta.cantidad > 0)
+    .reduce((resultado, venta) => {
+      resultado[venta.producto] =
+        (resultado[venta.producto] || 0) + valorVenta(venta);
+
+      return resultado;
+    }, {});
+
+  return Object.entries(totales)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, k)
+    .map(([producto]) => producto);
 }
 
 module.exports = {
