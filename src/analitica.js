@@ -14,6 +14,7 @@
  */
 function valorVenta(venta) {
   // Tu código aquí
+  return venta.cantidad * venta.precio;
 }
 
 // ============================================================================
