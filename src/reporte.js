@@ -1,62 +1,79 @@
-/**
- * Reporte de Consola - Café Origen v0.1 (Plantilla Base)
- * Ejecuta este archivo para probar tus funciones: node src/reporte.js
- */
 const { ventas } = require("./datos");
 const {
-  valorVenta,
   totalVendido,
-  totalUnidades,
-  ventaMayorValor,
-  ventasDeCiudad,
-  promedioPorVenta,
-  ventasValidas,
-  resumenVentas,
+  unidadesVendidas,
+  ventaMayor,
+  ticketPromedio,
   totalPorCiudad,
   unidadesPorProducto,
   topProductosPorValor,
+  ventasDelDia,
 } = require("./analitica");
 
+function pesos(valor) {
+  return `$${valor.toLocaleString("es-CO")}`;
+}
+
+function mostrarResumenDia(fecha) {
+  const ventasDia = ventasDelDia(ventas, fecha);
+
+  console.log(`\nResumen del día ${fecha}`);
+
+  if (ventasDia.length === 0) {
+    console.log("No hay ventas registradas para este día.");
+    console.log("Total vendido: $0");
+    console.log("Unidades vendidas: 0");
+    console.log("Ticket promedio: $0");
+    return;
+  }
+
+  console.log("Ventas registradas:", ventasDia.length);
+  console.log("Total vendido:", pesos(totalVendido(ventasDia)));
+  console.log("Unidades vendidas:", unidadesVendidas(ventasDia));
+  console.log("Ticket promedio:", pesos(ticketPromedio(ventasDia)));
+}
+
+const mayorVenta = ventaMayor(ventas);
+
 console.log("==============================================================");
-console.log("         REPORTE DE ANALÍTICA - CAFÉ ORIGEN v0.1              ");
-console.log("==============================================================\n");
-
-// ----------------------------------------------------------------------------
-// 1. EXPLORACIÓN INICIAL DE DATOS (Minirreto 1)
-// ----------------------------------------------------------------------------
-console.log("--- 1. EXPLORACIÓN DE LA MUESTRA (Minirreto 1) ---");
-console.log("Cantidad de registros:", ventas.length);
-console.log("Primer registro      :", ventas[0]);
-console.log("Último registro      :", ventas.at(-1));
-console.log();
-
-// ----------------------------------------------------------------------------
-// 2. INDICADORES CON CICLOS FOR...OF (Minirreto 2)
-// ----------------------------------------------------------------------------
-console.log("--- 2. INDICADORES CON CICLOS (Minirreto 2) ---");
-console.log("Valor primera venta  :", valorVenta(ventas[0]));
-console.log("Total vendido        :", totalVendido(ventas));
-console.log("Total unidades       :", totalUnidades(ventas));
-console.log("Venta mayor valor    :", ventaMayorValor(ventas));
-console.log("Ventas en Medellín   :", ventasDeCiudad(ventas, "Medellín"));
-console.log("Promedio por venta   :", promedioPorVenta(ventas));
-console.log();
-
-// ----------------------------------------------------------------------------
-// 3. AGRUPACIONES Y RANKINGS CON MÉTODOS DE ARREGLO (Minirreto 3)
-// ----------------------------------------------------------------------------
-console.log("--- 3. AGRUPACIONES Y TOP K CON MÉTODOS (Minirreto 3) ---");
-console.log("Ventas válidas       :", ventasValidas(ventas));
-console.log("Resumen de ventas    :", resumenVentas(ventas));
-console.log("Total por ciudad     :", totalPorCiudad(ventas));
-console.log("Unidades por producto:", unidadesPorProducto(ventas));
-console.log("Top 3 productos ($)  :", topProductosPorValor(ventas, 3));
-console.log();
-
-// ----------------------------------------------------------------------------
-// 4. VERIFICACIÓN DE INMUTABILIDAD (Minirreto 4)
-// ----------------------------------------------------------------------------
-console.log("--- 4. VERIFICACIÓN DEL ARREGLO ORIGINAL (Minirreto 4) ---");
-console.log("¿Sigue teniendo 12 registros? :", ventas.length === 12);
-console.log("¿El primero sigue siendo ID 1?:", ventas[0].id === 1);
+console.log("             REPORTE DE ANALÍTICA - CAFÉ ORIGEN");
 console.log("==============================================================");
+
+console.log("\nRESUMEN GENERAL");
+console.log("Total vendido:", pesos(totalVendido(ventas)));
+console.log("Unidades vendidas:", unidadesVendidas(ventas));
+console.log("Ticket promedio:", pesos(ticketPromedio(ventas)));
+console.log(
+  "Venta mayor:",
+  mayorVenta
+    ? `${mayorVenta.producto} - ${pesos(mayorVenta.cantidad * mayorVenta.precio)}`
+    : "Sin ventas"
+);
+
+console.log("\nVENTAS POR CIUDAD");
+const ciudades = Object.entries(totalPorCiudad(ventas)).map(
+  ([ciudad, total]) => ({
+    ciudad,
+    total: pesos(total),
+  })
+);
+console.table(ciudades);
+
+console.log("\nUNIDADES POR PRODUCTO");
+const productos = Object.entries(unidadesPorProducto(ventas)).map(
+  ([producto, unidades]) => ({
+    producto,
+    unidades,
+  })
+);
+console.table(productos);
+
+console.log("\nTOP 3 PRODUCTOS POR VALOR");
+topProductosPorValor(ventas, 3).forEach((producto, indice) => {
+  console.log(`${indice + 1}. ${producto}`);
+});
+
+mostrarResumenDia("2026-09-01");
+mostrarResumenDia("2026-09-30");
+
+console.log("\n==============================================================");
