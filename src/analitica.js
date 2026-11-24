@@ -69,6 +69,18 @@ function totalUnidades(ventas) {
  */
 function ventaMayorValor(ventas) {
   // Tu código aquí
+  let mayorVenta = null;
+
+  for (const venta of ventas) {
+    if (
+      venta.cantidad > 0 &&
+      (mayorVenta === null || valorVenta(venta) > valorVenta(mayorVenta))
+    ) {
+      mayorVenta = venta;
+    }
+  }
+
+  return mayorVenta;
 }
 
 /**
