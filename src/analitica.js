@@ -175,6 +175,15 @@ function resumenVentas(ventas) {
  */
 function totalPorCiudad(ventas) {
   // Tu código aquí
+  return ventas
+    .filter((venta) => venta.cantidad > 0)
+    .reduce((totales, venta) => {
+      const ciudad = venta.ciudad.trim().toLowerCase();
+
+      totales[ciudad] = (totales[ciudad] || 0) + valorVenta(venta);
+
+      return totales;
+    }, {});
 }
 
 /**
