@@ -17,6 +17,10 @@ function valorVenta(venta) {
   return venta.cantidad * venta.precio;
 }
 
+function normalizarCiudad(ciudad) {
+  return ciudad.trim().toLowerCase();
+}
+
 // ============================================================================
 // MINIRRETO 2: Indicadores básicos con ciclos manuales (for ... of)
 // Requisito: Resolver usando un ciclo `for ... of` (sin .reduce, .filter, .map)
@@ -40,6 +44,89 @@ function totalVendido(ventas) {
   }
 
   return total;
+}
+
+function unidadesVendidas(ventas) {
+  let total = 0;
+
+  for (const venta of ventas) {
+    if (venta.cantidad > 0) {
+      total += venta.cantidad;
+    }
+  }
+
+  return total;
+}
+
+function ventaMayor(ventas) {
+  let mayor = null;
+
+  for (const venta of ventas) {
+    if (
+      venta.cantidad > 0 &&
+      (mayor === null || valorVenta(venta) > valorVenta(mayor))
+    ) {
+      mayor = venta;
+    }
+  }
+
+  return mayor;
+}
+
+function ticketPromedio(ventas) {
+  let total = 0;
+  let cantidadVentas = 0;
+
+  for (const venta of ventas) {
+    if (venta.cantidad > 0) {
+      total += valorVenta(venta);
+      cantidadVentas += 1;
+    }
+  }
+
+  return cantidadVentas === 0 ? 0 : total / cantidadVentas;
+}
+function ventasPorCiudad(ventas, ciudad) {
+  let total = 0;
+  const ciudadBuscada = normalizarCiudad(ciudad);
+
+  for (const venta of ventas) {
+    if (
+      venta.cantidad > 0 &&
+      normalizarCiudad(venta.ciudad) === ciudadBuscada
+    ) {
+      total += valorVenta(venta);
+    }
+  }
+
+  return total;
+}
+
+function totalVendidoM(ventas) {
+  return ventas
+    .filter((venta) => venta.cantidad > 0)
+    .map((venta) => valorVenta(venta))
+    .reduce((total, valor) => total + valor, 0);
+}
+
+function unidadesVendidasM(ventas) {
+  return ventas
+    .filter((venta) => venta.cantidad > 0)
+    .map((venta) => venta.cantidad)
+    .reduce((total, cantidad) => total + cantidad, 0);
+}
+
+function ventasPorCiudadM(ventas, ciudad) {
+  const ciudadBuscada = normalizarCiudad(ciudad);
+
+  return ventas
+    .filter(
+      (venta) =>
+        venta.cantidad > 0 &&
+        normalizarCiudad(venta.ciudad) === ciudadBuscada
+    )
+    .map((venta) => valorVenta(venta))
+    .reduce((total, valor) => total + valor, 0);
 }
 
 /**
@@ -178,7 +265,7 @@ function totalPorCiudad(ventas) {
   return ventas
     .filter((venta) => venta.cantidad > 0)
     .reduce((totales, venta) => {
-      const ciudad = venta.ciudad.trim().toLowerCase();
+      const ciudad = normalizarCiudad(venta.ciudad);
 
       totales[ciudad] = (totales[ciudad] || 0) + valorVenta(venta);
 
@@ -231,16 +318,24 @@ function topProductosPorValor(ventas, k) {
     .map(([producto]) => producto);
 }
 
+function ventasDelDia(ventas, fecha) {
+  return ventas.filter(
+    (venta) => venta.fecha === fecha && venta.cantidad > 0
+  );
+}
+
 module.exports = {
   valorVenta,
   totalVendido,
-  totalUnidades,
-  ventaMayorValor,
-  ventasDeCiudad,
-  promedioPorVenta,
-  ventasValidas,
-  resumenVentas,
+  unidadesVendidas,
+  ventaMayor,
+  ticketPromedio,
+  ventasPorCiudad,
+  totalVendidoM,
+  unidadesVendidasM,
+  ventasPorCiudadM,
   totalPorCiudad,
   unidadesPorProducto,
   topProductosPorValor,
+  ventasDelDia,
 };
