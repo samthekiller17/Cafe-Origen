@@ -144,6 +144,7 @@ function promedioPorVenta(ventas) {
  */
 function ventasValidas(ventas) {
   // Tu código aquí
+  return ventas.filter((venta) => venta.cantidad > 0);
 }
 
 /**
